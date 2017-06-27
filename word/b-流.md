@@ -1,5 +1,7 @@
 #### 从外部迭代到内部迭代
 
+> 只要调用List或Set的stream就能得到流。
+
 ```java
 /**
  * artist -> artist.from("London")使用Predicate接口类
@@ -26,7 +28,7 @@ assertEquals(asList("a", "b"), collected);
 //string -> string.toUpperCase()使用Function接口
 List<String> collected = Stream.of("a","b")
   						.map(string -> string.toUpperCase())
-  						.collect(toList());
+  						.collect(Collectors.toList());
 ```
 
 > `filter`遍历数据并检查其中元素
@@ -44,7 +46,7 @@ long count = allArtists.stream()
 //numbers -> numbers.stream()使用Function接口，返回Stream
 List<Integer> together = Stream.of(asList(1,2), asList(3,4))
   						.flatMap(numbers -> numbers.stream())
-  						.collect(toList());
+  						.collect(Collectors.toList());
 ```
 
 > `max`和`min`，在Stream中求最大值和最小值。
@@ -60,8 +62,35 @@ Track shortTrack = tracks.stream()
 > 原始`reduce`模式
 
 ```java
+Object accumulator = initialValue;
 for(Object element : collection){
   accumulator = combine(accumulator, element); //这个方法比较大小，然后赋值
 }
+//通过reduc求和,0作为初始值，然后最新acc是上一轮acc+element之和
+int count = Stream.of(1, 2, 3)
+  			.reduce(0, (acc, element) -> acc + element);
 ```
+
+##### 整合操作
+
+```java
+//找出某张专辑所有乐队的国籍
+Set<String> origins = album.getMusicians()
+					.filter(artist -> artist.getName().startsWith("The"))
+					.map(artist -> artist.getNationality())
+					.collect(toSet());
+```
+
+##### 重构遗留代码
+
+```java
+//找出曲目长度大于一分钟的歌曲名称--45
+Set<String> trackNames = albums.stream()
+  						.flatMap(album -> album.getTracks().stream())
+  						.filter(track -> track.getLength() > 60)
+  						.map(track -> track.getName())
+  						.collect(Collectors.toSet());
+```
+
+
 
