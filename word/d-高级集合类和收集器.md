@@ -1,4 +1,4 @@
-##### 方法引用
+## 方法引用
 
 ```java
 //artist -> artist.getName()
@@ -14,16 +14,16 @@ String[]::new
 new HashSet<>(asList(4,2,1,1)).stream().sorted().collect(Collectors.toList());
 ```
 
-##### 使用收集器
+## 使用收集器
 
-> collect里面的一些函数
+> collect里面的一些函数`maxBy`
 
 ```java
 //找出成员最多的乐队
 artists.collect(maxBy(comparing(artist -> artist.getMembers().count())))
 ```
 
-##### 数据分块`partitioningBy`
+###### 数据分块`partitioningBy`
 
 ```java
 //将艺术家组成的流分成乐队和独唱歌手两部分
@@ -31,21 +31,21 @@ Map<Boolean,List<Artist>> result = artists
   								.collect(partitioningBy(artist -> artist.isSolo()))
 ```
 
-##### 数据分组`groupingBy`
+###### 数据分组`groupingBy`
 
 ```java
 //使用主唱对专辑分组，接受Predicate对象将数据分成true、false分组
 albums.collect(groupingBy(album -> album.getMainMusician()))
 ```
 
-##### 字符串`joing`
+###### 字符串`joing`
 
 ```java
 //生成艺术家字符串"[John, Paul]"，提供分隔符、前缀、后缀
 artists.stream().map(Artist::getName).collect(Collectors.joing(", ", "[". "]"))
 ```
 
-##### 使用收集器
+###### 使用收集器`mapping`
 
 > 下游收集器
 
